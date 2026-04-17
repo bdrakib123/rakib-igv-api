@@ -17,27 +17,29 @@ const extractInstagramVideo = async (url) => {
 
   let mediaUrl = null;
 
-page.on("response", (response) => {
-  const resUrl = response.url();
+  page.on("response", (response) => {
+    const resUrl = response.url();
 
-  if (
-    (resUrl.includes(".mp4") || resUrl.includes(".jpg")) &&
-    resUrl.includes("instagram")
-  ) {
-    mediaUrl = resUrl;
-  }
-});
+    if (
+      (resUrl.includes(".mp4") || resUrl.includes(".jpg")) &&
+      resUrl.includes("instagram")
+    ) {
+      mediaUrl = resUrl;
+    }
+  });
+
   await page.goto(url, {
     waitUntil: "networkidle2",
     timeout: 60000
   });
 
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 
   await browser.close();
 
   if (!mediaUrl) throw new Error("Media not found");
 
-return mediaUrl;
+  return mediaUrl;
+};
 
 module.exports = { extractInstagramVideo };
