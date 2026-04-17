@@ -10,14 +10,13 @@ exports.downloadInstagram = async (req, res) => {
     });
 
   try {
-    const video = await extractInstagramVideo(url);
+    const media = await extractInstagramVideo(url);
 
-    res.json({
-      status: true,
-      platform: "instagram",
-      video
-    });
-
+res.json({
+  status: true,
+  platform: "instagram",
+  media
+});
   } catch (err) {
     res.status(500).json({
       status: false,
