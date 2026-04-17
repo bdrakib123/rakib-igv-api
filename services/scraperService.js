@@ -15,16 +15,18 @@ const extractInstagramVideo = async (url) => {
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
   );
 
-  let videoUrl = null;
+  let mediaUrl = null;
 
-  page.on("response", (response) => {
-    const resUrl = response.url();
+page.on("response", (response) => {
+  const resUrl = response.url();
 
-    if (resUrl.includes(".mp4") && resUrl.includes("instagram")) {
-      videoUrl = resUrl;
-    }
-  });
-
+  if (
+    (resUrl.includes(".mp4") || resUrl.includes(".jpg")) &&
+    resUrl.includes("instagram")
+  ) {
+    mediaUrl = resUrl;
+  }
+});
   await page.goto(url, {
     waitUntil: "networkidle2",
     timeout: 60000
@@ -34,9 +36,8 @@ const extractInstagramVideo = async (url) => {
 
   await browser.close();
 
-  if (!videoUrl) throw new Error("Video not found");
+  if (!mediaUrl) throw new Error("Media not found");
 
-  return videoUrl;
-};
+return mediaUrl;
 
 module.exports = { extractInstagramVideo };
