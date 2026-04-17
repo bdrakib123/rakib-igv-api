@@ -25,10 +25,7 @@ const routes = require("./routes/routes");
 app.use("/api", routes);
 
 app.get("/", (req, res) => {
-  res.json({
-    status: true,
-    message: "Rakib IGV API Running 🚀"
-  });
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const path = require("path");
