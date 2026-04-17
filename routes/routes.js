@@ -19,7 +19,6 @@ router.get("/download-file", async (req, res) => {
       });
     }
 
-    // fetch file
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -29,22 +28,21 @@ router.get("/download-file", async (req, res) => {
       });
     }
 
-    const contentType = response.headers.get("content-type");
+    const contentType = response.headers.get("content-type") || "video/mp4";
 
-    // file type detect
-    let filename = "file";
-    if (contentType.includes("video")) {
-      filename = "video.mp4";
-    } else if (contentType.includes("image")) {
+    let filename = "file.mp4";
+    if (contentType.includes("image")) {
       filename = "image.jpg";
     }
 
-    // headers set (force download)
+    // 🔥 FIX: buffer use instead of pipe
+    const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
     res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
     res.setHeader("Content-Type", contentType);
 
-    // stream file
-    response.body.pipe(res);
+    res.send(buffer);
 
   } catch (err) {
     res.status(500).json({
@@ -53,5 +51,4 @@ router.get("/download-file", async (req, res) => {
     });
   }
 });
-
 module.exports = router;
